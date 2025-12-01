@@ -29,8 +29,33 @@ void ExchangeSystem::handleBooksMenu() {
 }
 
 void ExchangeSystem::handleUsersMenu() {
-    showUsersMenu();
+    int option;
+    cout << "\n--- Users Menu ---\n";
+    cout << "1. Register User\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+    cin >> option;
+
+    if(option == 1) registerUser();
 }
+
+void ExchangeSystem::registerUser() {
+    string name, email, phone;
+    cout << "\nEnter name: ";
+    cin.ignore();
+    getline(cin, name);
+    cout << "Enter email: ";
+    getline(cin, email);
+    cout << "Enter phone: ";
+    getline(cin, phone);
+
+    User newUser(nextUserId++, name, email, phone);
+    users.push_back(newUser);
+
+    cout << "\n🎉 User registered successfully!\n";
+}
+ exchangeSystem.cpp me ye function add krna hai
+
 
 void ExchangeSystem::handleRequestsMenu() {
     showRequestsMenu();
