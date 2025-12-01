@@ -6,13 +6,16 @@ using namespace std;
 
 class Request {
 private:
-    int requestId;
+    int id;
     int bookId;
     int userId;
-    string status; // PENDING, APPROVED, REJECTED
+    string status;
 
 public:
-    Request(); // Constructor (implementation later)
+    Request();
+    Request(int id, int bookId, int userId);
+
+    void displayRequest() const;
 };
 
 #endif
