@@ -12,5 +12,4 @@ void Request::displayRequest() const {
          << "Book: " << bookId 
          << " | User: " << userId 
          << " | Status: " << status << "\n";
-    cout<<"/n-------------------------\n";     
 }

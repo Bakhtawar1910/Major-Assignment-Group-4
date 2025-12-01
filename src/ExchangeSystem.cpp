@@ -32,9 +32,34 @@ void ExchangeSystem::handleUsersMenu() {
     showUsersMenu();
 }
 
-void ExchangeSystem::handleRequestsMenu() {
-    showRequestsMenu();
+// -------------------- Request Feature Code --------------------
+
+void ExchangeSystem::createRequest() {
+    int userId, bookId;
+    cout << "\nEnter User ID: ";
+    cin >> userId;
+
+    cout << "\nEnter Book ID: ";
+    cin >> bookId;
+
+    Request req(nextRequestId++, bookId, userId);
+    requests.push_back(req);
+
+    cout << "\n📌 Request created successfully!\n";
 }
+
+void ExchangeSystem::handleRequestsMenu() {
+    int option;
+    cout << "\n--- Requests Menu ---\n";
+    cout << "1. Create Request\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+    cin >> option;
+
+    if(option == 1) createRequest();
+}
+
+// -------------------- System Run Loop --------------------
 
 void ExchangeSystem::run() {
     int choice;
