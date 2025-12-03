@@ -61,6 +61,43 @@ void ExchangeSystem::handleRequestsMenu() {
     showRequestsMenu();
 }
 
+
+void ExchangeSystem::saveUsers() {
+    ofstream file("data/users.txt");
+    for (auto &u : users) {
+        file << u.getId() << "|"
+             << u.getName() << "|"
+             << u.getEmail() << "|"
+             << u.getPhone() << "\n";
+    }
+    file.close();
+}
+
+
+void ExchangeSystem::loadUsers() {
+    ifstream file("data/users.txt");
+    if (!file) return;
+
+    users.clear();
+    string line;
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, name, email, phone;
+
+        getline(ss, idStr, '|');
+        getline(ss, name, '|');
+        getline(ss, email, '|');
+        getline(ss, phone, '|');
+
+        int id = stoi(idStr);
+        users.push_back(User(id, name, email, phone));
+
+        nextUserId = max(nextUserId, id + 1);
+    }
+    file.close();
+}
+
 void ExchangeSystem::run() {
     int choice;
     do {
