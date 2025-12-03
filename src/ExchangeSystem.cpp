@@ -35,7 +35,6 @@ void ExchangeSystem::createRequest() {
     int userId, bookId;
     cout << "\nEnter User ID: ";
     cin >> userId;
-    cout<<"\n"
     cout << "Enter Book ID: ";
     cin >> bookId;
 
