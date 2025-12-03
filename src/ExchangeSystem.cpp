@@ -1,5 +1,7 @@
 #include "ExchangeSystem.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 void ExchangeSystem::showMainMenu() {
@@ -28,6 +30,8 @@ void ExchangeSystem::handleBooksMenu() {
     showBooksMenu();
 }
 
+// -------------------- USER FEATURE --------------------
+
 void ExchangeSystem::handleUsersMenu() {
     int option;
     cout << "\n--- Users Menu ---\n";
@@ -54,13 +58,35 @@ void ExchangeSystem::registerUser() {
 
     cout << "\n🎉 User registered successfully!\n";
 }
- exchangeSystem.cpp me ye function add krna hai
 
+// -------------------- REQUEST FEATURE --------------------
 
-void ExchangeSystem::handleRequestsMenu() {
-    showRequestsMenu();
+void ExchangeSystem::createRequest() {
+    int userId, bookId;
+    cout << "\nEnter User ID: ";
+    cin >> userId;
+
+    cout << "\nEnter Book ID: ";
+    cin >> bookId;
+
+    Request req(nextRequestId++, bookId, userId);
+    requests.push_back(req);
+
+    cout << "\n📌 Request created successfully!\n";
 }
 
+void ExchangeSystem::handleRequestsMenu() {
+    int option;
+    cout << "\n--- Requests Menu ---\n";
+    cout << "1. Create Request\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+    cin >> option;
+
+    if(option == 1) createRequest();
+}
+
+// -------------------- SAVE / LOAD USERS --------------------
 
 void ExchangeSystem::saveUsers() {
     ofstream file("data/users.txt");
@@ -72,7 +98,6 @@ void ExchangeSystem::saveUsers() {
     }
     file.close();
 }
-
 
 void ExchangeSystem::loadUsers() {
     ifstream file("data/users.txt");
@@ -97,6 +122,8 @@ void ExchangeSystem::loadUsers() {
     }
     file.close();
 }
+
+// -------------------- SYSTEM RUN LOOP --------------------
 
 void ExchangeSystem::run() {
     int choice;
