@@ -12,6 +12,22 @@ void ExchangeSystem::showMainMenu() {
     cout << "Enter your choice: ";
 }
 
+void ExchangeSystem::addBook() {
+    string title, author, genre;
+    cout << "\nEnter book title: ";
+    cin.ignore();
+    getline(cin, title);
+    cout << "Enter author name: ";
+    getline(cin, author);
+    cout << "Enter genre: ";
+    getline(cin, genre);
+
+    Book newBook(nextBookId++, title, author, genre);
+    books.push_back(newBook);
+
+    cout << "\n📌 Book added successfully!\n";
+}
+
 void ExchangeSystem::showBooksMenu() {
     cout << "\n--- Books Menu (Feature coming soon) ---\n";
 }
@@ -25,9 +41,15 @@ void ExchangeSystem::showRequestsMenu() {
 }
 
 void ExchangeSystem::handleBooksMenu() {
-    showBooksMenu();
-}
+    int option;
+    cout << "\n--- Books Menu ---\n";
+    cout << "1. Add Book\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+    cin >> option;
 
+    if(option == 1) addBook();
+}
 void ExchangeSystem::handleUsersMenu() {
     showUsersMenu();
 }

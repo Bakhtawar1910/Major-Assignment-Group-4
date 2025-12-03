@@ -12,7 +12,15 @@ private:
     string genre;
 
 public:
-    Book(); // Constructor (implementation will come later)
+    Book(); 
+    Book(int id, string title, string author, string genre);
+
+    int getId() const { return id; }
+    string getTitle() const { return title; }
+    string getAuthor() const { return author; }
+    string getGenre() const { return genre; }
+
+    void displayBook() const;
 };
 
 #endif
