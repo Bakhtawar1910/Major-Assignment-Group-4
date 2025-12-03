@@ -31,17 +31,25 @@ void ExchangeSystem::handleBooksMenu() {
 void ExchangeSystem::handleUsersMenu() {
     showUsersMenu();
 }
+
+// -------------------- Request Feature Code --------------------
+
 void ExchangeSystem::createRequest() {
     int userId, bookId;
     cout << "\nEnter User ID: ";
     cin >> userId;
+<<<<<<< HEAD
     cout << "Enter Book ID: ";
+=======
+
+    cout << "\nEnter Book ID: ";
+>>>>>>> d80f00cf3a9f4f3f3a106a03aa9bf3b0d34616ee
     cin >> bookId;
 
     Request req(nextRequestId++, bookId, userId);
     requests.push_back(req);
 
-    cout << "\n Request created successfully!\n";
+    cout << "\n📌 Request created successfully!\n";
 }
 
 void ExchangeSystem::handleRequestsMenu() {
@@ -54,6 +62,9 @@ void ExchangeSystem::handleRequestsMenu() {
 
     if(option == 1) createRequest();
 }
+
+// -------------------- System Run Loop --------------------
+
 void ExchangeSystem::run() {
     int choice;
     do {
