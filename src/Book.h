@@ -12,7 +12,7 @@ private:
     string genre;
 
 public:
-    Book(); 
+    Book();
     Book(int id, string title, string author, string genre);
 
     int getId() const { return id; }

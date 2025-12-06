@@ -106,7 +106,38 @@ void ExchangeSystem::handleRequestsMenu() {
 
     if(option == 1) createRequest();
 }
+void ExchangeSystem::saveBooks() {
+    ofstream file("data/books.txt");
+    for (auto &b : books) {
+        file << b.getId() << "|"
+             << b.getTitle() << "|"
+             << b.getAuthor() << "|"
+             << b.getGenre() << "\n";
+    }
+    file.close();
+}void ExchangeSystem::loadBooks() {
+    ifstream file("data/books.txt");
+    if (!file) return;
 
+    books.clear();
+    string line;
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, title, author, genre;
+
+        getline(ss, idStr, '|');
+        getline(ss, title, '|');
+        getline(ss, author, '|');
+        getline(ss, genre, '|');
+
+        int id = stoi(idStr);
+        books.push_back(Book(id, title, author, genre));
+
+        nextBookId = max(nextBookId, id + 1);
+    }
+    file.close();
+}
 // -------------------- SYSTEM RUN LOOP --------------------
 
 void ExchangeSystem::run() {
