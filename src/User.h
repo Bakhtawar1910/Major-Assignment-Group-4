@@ -12,7 +12,13 @@ private:
     string phone;
 
 public:
-    User(); // Constructor (implementation will come later)
+    User();
+    User(int id, string name, string email, string phone);
+
+    int getId() const { return id; }
+    string getName() const { return name; }
+
+    void displayUser() const;
 };
 
 #endif
