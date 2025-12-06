@@ -17,6 +17,8 @@ public:
 
     int getId() const { return id; }
     string getName() const { return name; }
+    string getEmail() const { return email; }
+    string getPhone() const { return phone; }
 
     void displayUser() const;
 };
