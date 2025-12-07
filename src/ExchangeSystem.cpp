@@ -1,41 +1,39 @@
 #include "ExchangeSystem.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 using namespace std;
+
+/*
+ * Constructor
+ * ----------------------------------
+ * Automatically loads saved data when system starts.
+ */
+ExchangeSystem::ExchangeSystem() {
+    loadBooks();
+    loadUsers();
+    loadRequests();
+}
+
+// ===================== MAIN MENU =====================
 
 void ExchangeSystem::showMainMenu() {
     cout << "\n===== Old Book Exchange System =====\n";
     cout << "1. Manage Books\n";
     cout << "2. Manage Users\n";
     cout << "3. Manage Requests\n";
+    cout << "4. Save All Data\n";
     cout << "0. Exit\n";
     cout << "-----------------------------------\n";
     cout << "Enter your choice: ";
 }
 
-void ExchangeSystem::showBooksMenu() {
-    cout << "\n--- Books Menu (Feature coming soon) ---\n";
-}
-
-void ExchangeSystem::showUsersMenu() {
-    cout << "\n--- Users Menu (Feature coming soon) ---\n";
-}
-
-void ExchangeSystem::showRequestsMenu() {
-    cout << "\n--- Requests Menu (Feature coming soon) ---\n";
-}
-
-void ExchangeSystem::handleBooksMenu() {
-    showBooksMenu();
-}
-
-void ExchangeSystem::handleUsersMenu() {
-    showUsersMenu();
-}
-
-void ExchangeSystem::handleRequestsMenu() {
-    showRequestsMenu();
-}
-
+/*
+ * run()
+ * --------------------------------------------------
+ * Main program loop that keeps running until exit.
+ */
 void ExchangeSystem::run() {
     int choice;
     do {
@@ -43,12 +41,307 @@ void ExchangeSystem::run() {
         cin >> choice;
 
         switch (choice) {
-            case 1: handleBooksMenu(); break;
-            case 2: handleUsersMenu(); break;
+            case 1: handleBooksMenu();    break;
+            case 2: handleUsersMenu();    break;
             case 3: handleRequestsMenu(); break;
-            case 0: cout << "Exiting... Goodbye!\n"; break;
-            default: cout << "Invalid choice. Try again.\n";
+            case 4: saveAll();            break;
+            case 0:
+                cout << "\nGoodbye! 👋\n";
+                break;
+            default:
+                cout << "Invalid option, try again!\n";
         }
 
     } while (choice != 0);
+}
+
+// ===================== BOOK MODULE =====================
+
+void ExchangeSystem::showBooksMenu() {
+    cout << "\n--- Books Menu ---\n";
+    cout << "1. Add Book\n";
+    cout << "2. List Books\n";
+    cout << "3. Search Book\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+}
+
+void ExchangeSystem::handleBooksMenu() {
+    int option;
+    showBooksMenu();
+    cin >> option;
+
+    switch (option) {
+        case 1: addBook();   break;
+        case 2: listBooks(); break;
+        case 3: searchBook(); break;
+    }
+}
+
+/*
+ * addBook()
+ * -------------------------------------
+ * Adds a new book to system
+ */
+void ExchangeSystem::addBook() {
+    string title, author, genre;
+    cin.ignore();
+    cout << "\nEnter book title: ";
+    getline(cin, title);
+    cout << "Enter author name: ";
+    getline(cin, author);
+    cout << "Enter genre: ";
+    getline(cin, genre);
+
+    books.push_back(Book(nextBookId++, title, author, genre));
+    cout << "\n📌 Book added successfully!\n";
+}
+
+/*
+ * listBooks()
+ * -------------------------------------
+ * Display all books stored in vector
+ */
+void ExchangeSystem::listBooks() {
+    if (books.empty()) {
+        cout << "\n⚠ No books available.\n";
+        return;
+    }
+
+    cout << "\n--- All Books ---\n";
+    for (auto &b : books)
+        b.displayBook();
+}
+
+/*
+ * searchBook()
+ * -------------------------------------
+ * Searches by exact title match
+ */
+void ExchangeSystem::searchBook() {
+    string title;
+    cin.ignore();
+    cout << "\nEnter book title: ";
+    getline(cin, title);
+
+    bool found = false;
+    for (auto &b : books) {
+        if (b.getTitle() == title) {
+            b.displayBook();
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "\n❌ Book not found!\n";
+}
+
+// ===================== USER MODULE =====================
+
+void ExchangeSystem::showUsersMenu() {
+    cout << "\n--- Users Menu ---\n";
+    cout << "1. Register User\n";
+    cout << "2. List Users\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+}
+
+void ExchangeSystem::handleUsersMenu() {
+    int option;
+    showUsersMenu();
+    cin >> option;
+
+    switch (option) {
+        case 1: registerUser(); break;
+        case 2: listUsers();    break;
+    }
+}
+
+/*
+ * registerUser()
+ * -------------------------------------
+ * Adds new user entry to system
+ */
+void ExchangeSystem::registerUser() {
+    string name, email, phone;
+    cin.ignore();
+    cout << "\nEnter name: ";
+    getline(cin, name);
+    cout << "Enter email: ";
+    getline(cin, email);
+    cout << "Enter phone: ";
+    getline(cin, phone);
+
+    users.push_back(User(nextUserId++, name, email, phone));
+    cout << "\n🎉 User registered successfully!\n";
+}
+
+/*
+ * listUsers()
+ * -------------------------------------
+ * Displays all registered users
+ */
+void ExchangeSystem::listUsers() {
+    if (users.empty()) {
+        cout << "\n⚠ No users found.\n";
+        return;
+    }
+
+    cout << "\n--- All Users ---\n";
+    for (auto &u : users)
+        u.displayUser();
+}
+
+// ===================== REQUEST MODULE =====================
+
+void ExchangeSystem::showRequestsMenu() {
+    cout << "\n--- Requests Menu ---\n";
+    cout << "1. Create Request\n";
+    cout << "2. List Requests\n";
+    cout << "0. Back\n";
+    cout << "Select option: ";
+}
+
+void ExchangeSystem::handleRequestsMenu() {
+    int option;
+    showRequestsMenu();
+    cin >> option;
+
+    switch (option) {
+        case 1: createRequest(); break;
+        case 2: listRequests(); break;
+    }
+}
+
+/*
+ * createRequest()
+ * -------------------------------------
+ * User requests a book by entering IDs
+ */
+void ExchangeSystem::createRequest() {
+    int userId, bookId;
+    cout << "\nEnter User ID: ";
+    cin >> userId;
+    cout << "Enter Book ID: ";
+    cin >> bookId;
+
+    requests.push_back(Request(nextRequestId++, bookId, userId));
+    cout << "\n📌 Request created successfully!\n";
+}
+
+/*
+ * listRequests()
+ * -------------------------------------
+ * Displays all pending requests
+ */
+void ExchangeSystem::listRequests() {
+    if (requests.empty()) {
+        cout << "\n⚠ No requests made.\n";
+        return;
+    }
+
+    cout << "\n--- All Requests ---\n";
+    for (auto &r : requests)
+        r.displayRequest();
+}
+
+// ===================== FILE HANDLING =====================
+
+void ExchangeSystem::saveBooks() {
+    ofstream file("data/books.txt");
+    for (auto &b : books) {
+        file << b.getId() << "|" << b.getTitle()
+             << "|" << b.getAuthor() << "|" << b.getGenre() << "\n";
+    }
+}
+
+void ExchangeSystem::loadBooks() {
+    ifstream file("data/books.txt");
+    if (!file) return;
+    books.clear();
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, title, author, genre;
+        getline(ss, idStr, '|');
+        getline(ss, title, '|');
+        getline(ss, author, '|');
+        getline(ss, genre, '|');
+
+        int id = stoi(idStr);
+        books.push_back(Book(id, title, author, genre));
+        nextBookId = max(nextBookId, id + 1);
+    }
+}
+
+void ExchangeSystem::saveUsers() {
+    ofstream file("data/users.txt");
+    for (auto &u : users) {
+        file << u.getId() << "|" << u.getName()
+             << "|" << u.getEmail() << "|" << u.getPhone() << "\n";
+    }
+}
+
+void ExchangeSystem::loadUsers() {
+    ifstream file("data/users.txt");
+    if (!file) return;
+    users.clear();
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, name, email, phone;
+        getline(ss, idStr, '|');
+        getline(ss, name, '|');
+        getline(ss, email, '|');
+        getline(ss, phone, '|');
+
+        int id = stoi(idStr);
+        users.push_back(User(id, name, email, phone));
+        nextUserId = max(nextUserId, id + 1);
+    }
+}
+
+void ExchangeSystem::saveRequests() {
+    ofstream file("data/requests.txt");
+    for (auto &r : requests) {
+        file << r.getId() << "|" << r.getBookId()
+             << "|" << r.getUserId() << "|" << r.getStatus() << "\n";
+    }
+}
+
+void ExchangeSystem::loadRequests() {
+    ifstream file("data/requests.txt");
+    if (!file) return;
+    requests.clear();
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string idStr, bStr, uStr, status;
+        getline(ss, idStr, '|');
+        getline(ss, bStr, '|');
+        getline(ss, uStr, '|');
+        getline(ss, status, '|');
+
+        int id = stoi(idStr);
+        int bookId = stoi(bStr);
+        int userId = stoi(uStr);
+
+        requests.push_back(Request(id, bookId, userId));
+        nextRequestId = max(nextRequestId, id + 1);
+    }
+}
+
+/*
+ * saveAll()
+ * -------------------------------------
+ * Saves all modules in data folder
+ */
+void ExchangeSystem::saveAll() {
+    saveBooks();
+    saveUsers();
+    saveRequests();
+    cout << "\n💾 All data saved successfully!\n";
 }

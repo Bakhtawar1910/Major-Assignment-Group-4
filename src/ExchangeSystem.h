@@ -7,55 +7,66 @@
 #include "Request.h"
 using namespace std;
 
+/*
+ * ExchangeSystem Class
+ * ------------------------------------------
+ * This class handles the complete logic of:
+ *  - Managing Books
+ *  - Managing Users
+ *  - Managing Requests
+ *  - File Handling for Data Persistence
+ *  - Main System Navigation (Menus)
+ *
+ * All data is stored in vectors and also saved
+ * in text files inside the /data folder.
+ */
+
 class ExchangeSystem {
 private:
-    // Data storage
+    // Data storage containers
     vector<Book> books;
     vector<User> users;
     vector<Request> requests;
 
-    // Auto-increment IDs
+    // Auto-increment IDs for new entries
     int nextBookId = 1;
     int nextUserId = 1;
     int nextRequestId = 1;
 
-    // ----------- Menus -----------
+    // Menu display functions
     void showMainMenu();
     void showBooksMenu();
     void showUsersMenu();
     void showRequestsMenu();
 
-    // ----------- Book Operations -----------
+    // Book module functions
     void addBook();
     void listBooks();
     void searchBook();
     void handleBooksMenu();
 
-    // ----------- User Operations -----------
+    // User module functions
     void registerUser();
     void listUsers();
     void handleUsersMenu();
 
-    // ----------- Request Operations -----------
+    // Request module functions
     void createRequest();
     void listRequests();
     void handleRequestsMenu();
 
-    // ----------- File Handling -----------
+    // File Management
     void saveBooks();
     void loadBooks();
-
     void saveUsers();
     void loadUsers();
-
     void saveRequests();
     void loadRequests();
-
-    void saveAll();   // Save everything
+    void saveAll();
 
 public:
-    ExchangeSystem(); // Loads existing data on startup
-    void run();       // Main system loop
+    ExchangeSystem(); // Loads stored data automatically from files
+    void run();       // Main infinite loop of the system
 };
 
 #endif
