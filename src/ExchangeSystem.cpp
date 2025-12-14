@@ -1,11 +1,21 @@
+/**
+ * @file ExchangeSystem.cpp
+ * @brief Implementation of the ExchangeSystem class for managing books, users, and exchange requests.
+ */
+
 #include "ExchangeSystem.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+
 using namespace std;
 
-// Load data on startup
+/**
+ * @brief Constructor for ExchangeSystem.
+ *
+ * Loads books, users, and requests data from files during system startup.
+ */
 ExchangeSystem::ExchangeSystem() {
     loadBooks();
     loadUsers();
@@ -14,6 +24,9 @@ ExchangeSystem::ExchangeSystem() {
 
 // ===================== MAIN MENU =====================
 
+/**
+ * @brief Displays the main menu of the exchange system.
+ */
 void ExchangeSystem::showMainMenu() {
     cout << "\n===== Old Book Exchange System =====\n";
     cout << "1. Manage Books\n";
@@ -27,6 +40,9 @@ void ExchangeSystem::showMainMenu() {
 
 // ===================== BOOKS =====================
 
+/**
+ * @brief Displays the books management menu.
+ */
 void ExchangeSystem::showBooksMenu() {
     cout << "\n--- Books Menu ---\n";
     cout << "1. Add Book\n";
@@ -36,6 +52,11 @@ void ExchangeSystem::showBooksMenu() {
     cout << "Select option: ";
 }
 
+/**
+ * @brief Adds a new book to the system.
+ *
+ * Takes book details as input from the user and stores them in memory.
+ */
 void ExchangeSystem::addBook() {
     string title, author, genre;
     cin.ignore();
@@ -47,18 +68,24 @@ void ExchangeSystem::addBook() {
     getline(cin, genre);
 
     books.push_back(Book(nextBookId++, title, author, genre));
-    cout << "\n📌 Book added successfully!\n";
+    cout << "\nBook added successfully!\n";
 }
 
+/**
+ * @brief Displays all available books.
+ */
 void ExchangeSystem::listBooks() {
     if (books.empty()) {
-        cout << "\n⚠ No books available.\n";
+        cout << "\nNo books available.\n";
         return;
     }
     cout << "\n--- All Books ---\n";
     for (auto &b : books) b.displayBook();
 }
 
+/**
+ * @brief Searches for a book by its title.
+ */
 void ExchangeSystem::searchBook() {
     string title;
     cin.ignore();
@@ -73,9 +100,12 @@ void ExchangeSystem::searchBook() {
         }
     }
     if (!found)
-        cout << "\n❌ Book not found!\n";
+        cout << "\nBook not found!\n";
 }
 
+/**
+ * @brief Handles user interaction for the books menu.
+ */
 void ExchangeSystem::handleBooksMenu() {
     int option;
     showBooksMenu();
@@ -90,6 +120,9 @@ void ExchangeSystem::handleBooksMenu() {
 
 // ===================== USERS =====================
 
+/**
+ * @brief Displays the users management menu.
+ */
 void ExchangeSystem::showUsersMenu() {
     cout << "\n--- Users Menu ---\n";
     cout << "1. Register User\n";
@@ -98,6 +131,9 @@ void ExchangeSystem::showUsersMenu() {
     cout << "Select option: ";
 }
 
+/**
+ * @brief Registers a new user in the system.
+ */
 void ExchangeSystem::registerUser() {
     string name, email, phone;
     cin.ignore();
@@ -109,18 +145,24 @@ void ExchangeSystem::registerUser() {
     getline(cin, phone);
 
     users.push_back(User(nextUserId++, name, email, phone));
-    cout << "\n🎉 User registered successfully!\n";
+    cout << "\nUser registered successfully!\n";
 }
 
+/**
+ * @brief Displays all registered users.
+ */
 void ExchangeSystem::listUsers() {
     if (users.empty()) {
-        cout << "\n⚠ No users registered.\n";
+        cout << "\nNo users registered.\n";
         return;
     }
     cout << "\n--- All Users ---\n";
     for (auto &u : users) u.displayUser();
 }
 
+/**
+ * @brief Handles user interaction for the users menu.
+ */
 void ExchangeSystem::handleUsersMenu() {
     int option;
     showUsersMenu();
@@ -134,6 +176,9 @@ void ExchangeSystem::handleUsersMenu() {
 
 // ===================== REQUESTS =====================
 
+/**
+ * @brief Displays the requests management menu.
+ */
 void ExchangeSystem::showRequestsMenu() {
     cout << "\n--- Requests Menu ---\n";
     cout << "1. Create Request\n";
@@ -142,6 +187,9 @@ void ExchangeSystem::showRequestsMenu() {
     cout << "Select option: ";
 }
 
+/**
+ * @brief Creates a new book exchange request.
+ */
 void ExchangeSystem::createRequest() {
     int userId, bookId;
     cout << "\nEnter user ID: ";
@@ -150,18 +198,24 @@ void ExchangeSystem::createRequest() {
     cin >> bookId;
 
     requests.push_back(Request(nextRequestId++, bookId, userId));
-    cout << "\n📌 Request created successfully!\n";
+    cout << "\nRequest created successfully!\n";
 }
 
+/**
+ * @brief Displays all exchange requests.
+ */
 void ExchangeSystem::listRequests() {
     if (requests.empty()) {
-        cout << "\n⚠ No requests created.\n";
+        cout << "\nNo requests created.\n";
         return;
     }
     cout << "\n--- All Requests ---\n";
     for (auto &r : requests) r.displayRequest();
 }
 
+/**
+ * @brief Handles user interaction for the requests menu.
+ */
 void ExchangeSystem::handleRequestsMenu() {
     int option;
     showRequestsMenu();
@@ -175,6 +229,9 @@ void ExchangeSystem::handleRequestsMenu() {
 
 // ===================== FILE HANDLING =====================
 
+/**
+ * @brief Saves all book data to file.
+ */
 void ExchangeSystem::saveBooks() {
     ofstream file("data/books.txt");
     for (auto &b : books) {
@@ -182,6 +239,9 @@ void ExchangeSystem::saveBooks() {
     }
 }
 
+/**
+ * @brief Loads book data from file.
+ */
 void ExchangeSystem::loadBooks() {
     ifstream file("data/books.txt");
     if (!file) return;
@@ -201,6 +261,9 @@ void ExchangeSystem::loadBooks() {
     }
 }
 
+/**
+ * @brief Saves all user data to file.
+ */
 void ExchangeSystem::saveUsers() {
     ofstream file("data/users.txt");
     for (auto &u : users) {
@@ -208,6 +271,9 @@ void ExchangeSystem::saveUsers() {
     }
 }
 
+/**
+ * @brief Loads user data from file.
+ */
 void ExchangeSystem::loadUsers() {
     ifstream file("data/users.txt");
     if (!file) return;
@@ -227,6 +293,9 @@ void ExchangeSystem::loadUsers() {
     }
 }
 
+/**
+ * @brief Saves all request data to file.
+ */
 void ExchangeSystem::saveRequests() {
     ofstream file("data/requests.txt");
     for (auto &r : requests) {
@@ -234,6 +303,9 @@ void ExchangeSystem::saveRequests() {
     }
 }
 
+/**
+ * @brief Loads request data from file.
+ */
 void ExchangeSystem::loadRequests() {
     ifstream file("data/requests.txt");
     if (!file) return;
@@ -256,15 +328,23 @@ void ExchangeSystem::loadRequests() {
     }
 }
 
+/**
+ * @brief Saves all system data (books, users, requests).
+ */
 void ExchangeSystem::saveAll() {
     saveBooks();
     saveUsers();
     saveRequests();
-    cout << "\n💾 All data saved successfully!\n";
+    cout << "\nAll data saved successfully!\n";
 }
 
 // ===================== SYSTEM RUN LOOP =====================
 
+/**
+ * @brief Runs the main system loop.
+ *
+ * Displays menus and processes user input until exit.
+ */
 void ExchangeSystem::run() {
     int choice;
     do {
@@ -282,3 +362,4 @@ void ExchangeSystem::run() {
 
     } while (choice != 0);
 }
+
