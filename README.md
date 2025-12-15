@@ -29,6 +29,8 @@ This project demonstrates **object-oriented programming**, **file handling**, **
 - Data stored using simple text files
 
 ---
+## 🧱 Project Structure
+
 Old-Book-System/
 │
 ├── src/
@@ -58,7 +60,4 @@ Old-Book-System/
 - **Build:** Any standard C++ compiler (GCC, MinGW, MSVC)
 
 ---
-
-
-## 🧱 Project Structure
 
